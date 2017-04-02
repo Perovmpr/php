@@ -10,10 +10,12 @@ ENV DEBIAN_FRONTEND noninteractive
 #RUN mkdir /home/debian
 #RUN cd /home/debian
 #VOLUME ["/opt/results"]
+
 RUN apt-get update && apt-get -y install devscripts debhelper dh-exec dh-autoreconf libreadline-dev libltdl-dev wget nano apt-utils
 # Add PHP 7 repository
 # for Debian jessie
 # And System upgrade
+
 RUN echo "deb http://packages.dotdeb.org jessie all" \
     |  tee /etc/apt/sources.list.d/dotdeb.list \
     && wget -qO- https://www.dotdeb.org/dotdeb.gpg \
@@ -81,5 +83,13 @@ RUN mkdir /opt/oracle \
     && ln -s /opt/oracle/instantclient_12_1/libclntshcore.so.12.1 /opt/oracle/instantclient_12_1/libclntshcore.so \
     && ln -s /opt/oracle/instantclient_12_1/libocci.so.12.1 /opt/oracle/instantclient_12_1/libocci.so \
     && rm -rf /opt/oracle/*.zip
+
+RUN apt-get update && apt-get -y install locales
+RUN  echo "ru_RU ISO-8859-5" >> /etc/locale.gen && \
+    echo "ru_RU.KOI8-R KOI8-R" >> /etc/locale.gen && \
+    echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "ru_UA KOI8-U" >> /etc/locale.gen && \
+    echo "ru_UA.UTF-8 UTF-8" >> /etc/locale.gen && \
+    dpkg-reconfigure locales
 
 
