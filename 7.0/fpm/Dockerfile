@@ -85,7 +85,8 @@ RUN mkdir /opt/oracle \
     && rm -rf /opt/oracle/*.zip
 
 RUN apt-get update && apt-get -y install locales
-RUN  echo "ru_RU ISO-8859-5" >> /etc/locale.gen && \
+RUN  echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    echo "ru_RU ISO-8859-5" >> /etc/locale.gen && \
     echo "ru_RU.KOI8-R KOI8-R" >> /etc/locale.gen && \
     echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen && \
     echo "ru_UA KOI8-U" >> /etc/locale.gen && \
