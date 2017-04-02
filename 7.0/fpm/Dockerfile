@@ -7,10 +7,10 @@ ENV LC_ALL C
 ENV DEBIAN_FRONTEND noninteractive
 
 ##USER debian
-RUN mkdir /home/debian
-RUN cd /home/debian
-VOLUME ["/opt/results"]
-RUN apt-get update && apt-get -y install devscripts debhelper dh-exec dh-autoreconf libreadline-dev libltdl-dev wget nano
+#RUN mkdir /home/debian
+#RUN cd /home/debian
+#VOLUME ["/opt/results"]
+RUN apt-get update && apt-get -y install devscripts debhelper dh-exec dh-autoreconf libreadline-dev libltdl-dev wget nano apt-utils
 # Add PHP 7 repository
 # for Debian jessie
 # And System upgrade
@@ -48,9 +48,8 @@ RUN wget -nv -O msodbcsql-13.0.0.0.tar.gz \
 
 
 
-# (2) Or Build PDO driver with phpize
-RUN  apt-get install -y  apt-utils
-RUN  apt-get install -y unixodbc-dev php7.0-dev apt-utils \
+# (2) Or Build PDO_sqlsrv driver with phpize
+RUN  apt-get install -y unixodbc-dev php7.0-dev \
     && cd \
     && wget -nv "https://github.com/Microsoft/msphpsql/archive/PHP-7.0-Linux.tar.gz" \
     && tar -xf PHP-7.0-Linux.tar.gz \
@@ -61,7 +60,7 @@ RUN  apt-get install -y unixodbc-dev php7.0-dev apt-utils \
     && ./configure CXXFLAGS=-std=c++11 \
     && make \
     &&  make "INSTALL=$(pwd)/build/shtool install -c --mode=0644" install
-    RUN docker-php-ext-enable pdo_sqlsrv
+# Build sqlsrv driver with phpize
 RUN     cd \
         && cd msphpsql-PHP-7.0-Linux/source/ \
         && cp -r shared/ sqlsrv/ \
@@ -71,11 +70,16 @@ RUN     cd \
         && make \
         &&  make "INSTALL=$(pwd)/build/shtool install -c --mode=0644" install
 
-RUN docker-php-ext-enable sqlsrv
-#    && printf "; priority=20\nextension=pdo_sqlsrv.so" \
-#    |  tee /etc/php/7.0/mods-available/pdo_sqlsrv.ini \
-#    &&  phpenmod pdo_sqlsrv \
-#    && php --rextinfo pdo_sqlsrv \
-#    &&  phpdismod pdo_sqlsrv \
-#    &&  rm -f /usr/lib/php/20151012/pdo_sqlsrv.so
+# Build oracle
+RUN mkdir /opt/oracle \
+    && cd /opt/oracle \
+    && wget -q https://s3.amazonaws.com/merofile/instantclient-basic-linux.x64-12.1.0.2.0.zip \
+    && wget -q https://s3.amazonaws.com/merofile/instantclient-sdk-linux.x64-12.1.0.2.0.zip \
+    && unzip /opt/oracle/instantclient-basic-linux.x64-12.1.0.2.0.zip -d /opt/oracle \
+    && unzip /opt/oracle/instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /opt/oracle \
+    && ln -s /opt/oracle/instantclient_12_1/libclntsh.so.12.1 /opt/oracle/instantclient_12_1/libclntsh.so \
+    && ln -s /opt/oracle/instantclient_12_1/libclntshcore.so.12.1 /opt/oracle/instantclient_12_1/libclntshcore.so \
+    && ln -s /opt/oracle/instantclient_12_1/libocci.so.12.1 /opt/oracle/instantclient_12_1/libocci.so \
+    && rm -rf /opt/oracle/*.zip
+
 
