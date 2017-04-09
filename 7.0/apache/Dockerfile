@@ -26,7 +26,7 @@ RUN apt-get update && apt-get -y install devscripts debhelper dh-exec dh-autorec
 # Install UnixODBC
 # Compile odbc_config as it is not part of unixodbc package
 RUN  apt-get install -y whiptail \
-    unixodbc libgss3 odbcinst \ #devscripts debhelper dh-exec dh-autoreconf libreadline-dev libltdl-dev \
+    unixodbc libgss3 odbcinst devscripts debhelper dh-exec dh-autoreconf libreadline-dev libltdl-dev \
     && dget -u -x http://http.debian.net/debian/pool/main/u/unixodbc/unixodbc_2.3.1-3.dsc \
     && cd unixodbc-*/ \
     && dpkg-buildpackage -uc -us -B \
@@ -93,7 +93,7 @@ RUN  echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     echo "ru_UA.UTF-8 UTF-8" >> /etc/locale.gen && \
     dpkg-reconfigure locales
 RUN RUN rm -rf /root/* && \
-        rm -rf /tmp/* 
+        rm -rf /tmp/*
 
 RUN apt-get purge -y --auto-remove devscripts debhelper dh-exec dh-autoreconf locales wget apt-utils
 
