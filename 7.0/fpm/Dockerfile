@@ -96,6 +96,6 @@ RUN  echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
 RUN  rm -rf /root/* && \
         rm -rf /tmp/*
 
-RUN apt-get purge -y --auto-remove devscripts debhelper dh-exec dh-autoreconf locales wget apt-utils
+#RUN apt-get purge -y --auto-remove devscripts debhelper dh-exec dh-autoreconf locales wget apt-utils
 
 
