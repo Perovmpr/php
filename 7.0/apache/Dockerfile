@@ -11,22 +11,22 @@ ENV DEBIAN_FRONTEND noninteractive
 #RUN cd /home/debian
 #VOLUME ["/opt/results"]
 
-RUN apt-get update && apt-get -y install devscripts debhelper dh-exec dh-autoreconf libreadline-dev libltdl-dev wget nano apt-utils
+RUN apt-get update && apt-get -y install devscripts debhelper dh-exec dh-autoreconf libreadline-dev libltdl-dev wget apt-utils
 # Add PHP 7 repository
 # for Debian jessie
 # And System upgrade
 
-RUN echo "deb http://packages.dotdeb.org jessie all" \
-    |  tee /etc/apt/sources.list.d/dotdeb.list \
-    && wget -qO- https://www.dotdeb.org/dotdeb.gpg \
-    |  apt-key add - \
-    &&  apt-get update \
-    &&  apt-get upgrade -qq
+#RUN echo "deb http://packages.dotdeb.org jessie all" \
+#    |  tee /etc/apt/sources.list.d/dotdeb.list \
+#    && wget -qO- https://www.dotdeb.org/dotdeb.gpg \
+#    |  apt-key add - \
+#    &&  apt-get update \
+#    &&  apt-get upgrade -qq
 
 # Install UnixODBC
 # Compile odbc_config as it is not part of unixodbc package
 RUN  apt-get install -y whiptail \
-    unixodbc libgss3 odbcinst devscripts debhelper dh-exec dh-autoreconf libreadline-dev libltdl-dev \
+    unixodbc libgss3 odbcinst \ #devscripts debhelper dh-exec dh-autoreconf libreadline-dev libltdl-dev \
     && dget -u -x http://http.debian.net/debian/pool/main/u/unixodbc/unixodbc_2.3.1-3.dsc \
     && cd unixodbc-*/ \
     && dpkg-buildpackage -uc -us -B \
@@ -92,5 +92,9 @@ RUN  echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     echo "ru_UA KOI8-U" >> /etc/locale.gen && \
     echo "ru_UA.UTF-8 UTF-8" >> /etc/locale.gen && \
     dpkg-reconfigure locales
+RUN RUN rm -rf /root/* && \
+        rm -rf /tmp/* && \
+        rm /opt/oracle/*.zip
 
+RUN apt-get purge -y --auto-remove devscripts debhelper dh-exec dh-autoreconf locales wget apt-utils
 
