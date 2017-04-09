@@ -93,4 +93,9 @@ RUN  echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     echo "ru_UA.UTF-8 UTF-8" >> /etc/locale.gen && \
     dpkg-reconfigure locales
 
+RUN RUN rm -rf /root/* && \
+        rm -rf /tmp/*
+
+RUN apt-get purge -y --auto-remove devscripts debhelper dh-exec dh-autoreconf locales wget apt-utils
+
 

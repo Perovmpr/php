@@ -16,12 +16,12 @@ RUN apt-get update && apt-get -y install devscripts debhelper dh-exec dh-autorec
 # for Debian jessie
 # And System upgrade
 
-#RUN echo "deb http://packages.dotdeb.org jessie all" \
-#    |  tee /etc/apt/sources.list.d/dotdeb.list \
-#    && wget -qO- https://www.dotdeb.org/dotdeb.gpg \
-#    |  apt-key add - \
-#    &&  apt-get update \
-#    &&  apt-get upgrade -qq
+RUN echo "deb http://packages.dotdeb.org jessie all" \
+    |  tee /etc/apt/sources.list.d/dotdeb.list \
+    && wget -qO- https://www.dotdeb.org/dotdeb.gpg \
+    |  apt-key add - \
+    &&  apt-get update \
+    &&  apt-get upgrade -qq
 
 # Install UnixODBC
 # Compile odbc_config as it is not part of unixodbc package
