@@ -12,7 +12,8 @@ ENV DEBIAN_FRONTEND noninteractive
 #VOLUME ["/opt/results"]
 
 RUN apt-get update && apt-get -y install devscripts debhelper \
-dh-exec dh-autoreconf libreadline-dev libltdl-dev wget apt-utils firebird-dev apt-transport-https nano gdb
+dh-exec dh-autoreconf libreadline-dev libltdl-dev wget apt-utils firebird-dev apt-transport-https nano gdb \
+libaio1 libaio-dev
 # Add PHP 7 repository
 # for Debian jessie
 # And System upgrade
@@ -99,5 +100,6 @@ RUN echo "/opt/oracle/instantclient_12_2" >> /etc/ld.so.conf.d/oracle-instantcli
 RUN echo 'export LD_LIBRARY_PATH="/opt/oracle/instantclient_12_2"' >> ~/.bashrc
 RUN echo 'export ORACLE_HOME="/opt/oracle/instantclient_12_2"' >> ~/.bashrc
 RUN rm -rf /opt/oracle/oci8-2.1.8
+RUN rm -rf /opt/oracle/oci8-2.1.8.tgz
 #RUN apt-get purge -y --auto-remove devscripts debhelper dh-exec dh-autoreconf locales wget apt-utils
 
